@@ -1,21 +1,14 @@
 import azure.durable_functions as df
-from app_setup import durable_app
+from app_setup import app
 
 
-@durable_app.orchestration_trigger(context_name="context")
+@app.orchestration_trigger(context_name="context")
 def math_orchestrator(context: df.DurableOrchestrationContext):
 
-    sum_result = yield context.call_activity(
-        "add_numbers",
-        {"a": 10, "b": 20}
-    )
-
-    multiply_result = yield context.call_activity(
-        "multiply_numbers",
-        {"a": sum_result, "b": 2}
-    )
+    result1 = yield context.call_activity("add_numbers", {"a": 10, "b": 20})
+    result2 = yield context.call_activity("multiply_numbers", {"a": result1, "b": 5})
 
     return {
-        "sum": sum_result,
-        "double_sum": multiply_result
+        "addition": result1,
+        "multiplication": result2
     }

@@ -1,11 +1,11 @@
-from app_setup import durable_app
+from app_setup import app
 
 
-@durable_app.activity_trigger(input_name="input_data")
-def add_numbers(input_data: dict):
-    return input_data["a"] + input_data["b"]
+@app.activity_trigger(input_name="input")
+def add_numbers(input: dict):
+    return input["a"] + input["b"]
 
 
-@durable_app.activity_trigger(input_name="input_data")
-def multiply_numbers(input_data: dict):
-    return input_data["a"] * input_data["b"]
+@app.activity_trigger(input_name="input")
+def multiply_numbers(input: dict):
+    return input["a"] * input["b"]

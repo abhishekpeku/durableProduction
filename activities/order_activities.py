@@ -1,21 +1,11 @@
-from app_setup import durable_app
+from app_setup import app
 
 
-@durable_app.activity_trigger(input_name="order_data")
-def validate_order(order_data: dict):
-    return True
+@app.activity_trigger(input_name="input")
+def validate_order(input: dict):
+    return f"Order for {input['item']} validated"
 
 
-@durable_app.activity_trigger(input_name="order_data")
-def process_payment(order_data: dict):
-    return f"Payment of {order_data['amount']} successful"
-
-
-@durable_app.activity_trigger(input_name="order_data")
-def update_inventory(order_data: dict):
-    return "Inventory updated"
-
-
-@durable_app.activity_trigger(input_name="order_data")
-def send_confirmation(order_data: dict):
-    return f"Confirmation sent for {order_data['order_id']}"
+@app.activity_trigger(input_name="input")
+def process_payment(input: dict):
+    return f"Payment of {input['price']} processed"
