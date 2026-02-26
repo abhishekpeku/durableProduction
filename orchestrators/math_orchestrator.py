@@ -1,16 +1,13 @@
 import azure.durable_functions as df
-from functions_app import durable_app
+from app_setup import durable_app
 
 
 @durable_app.orchestration_trigger(context_name="context")
 def math_orchestrator(context: df.DurableOrchestrationContext):
 
-    retry_options = df.RetryOptions(first_retry_interval_in_milliseconds=5000, max_number_of_attempts=3)
-
-    sum_result = yield context.call_activity_with_retry(
+    sum_result = yield context.call_activity(
         "add_numbers",
-        retry_options,
-        {"a": 15, "b": 25}
+        {"a": 10, "b": 20}
     )
 
     multiply_result = yield context.call_activity(

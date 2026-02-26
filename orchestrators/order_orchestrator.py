@@ -1,28 +1,29 @@
 import azure.durable_functions as df
-from functions_app import durable_app
+from app_setup import durable_app
 
 
 @durable_app.orchestration_trigger(context_name="context")
 def order_orchestrator(context: df.DurableOrchestrationContext):
 
     order_data = {
-        "order_id": "ORD123",
+        "order_id": "ORD1001",
         "amount": 5000
     }
 
-    validation = yield context.call_activity("validate_order", order_data)
+    is_valid = yield context.call_activity("validate_order", order_data)
 
-    if not validation:
-        return "Order validation failed"
+    if not is_valid:
+        return {"status": "Validation Failed"}
 
     payment_status = yield context.call_activity("process_payment", order_data)
 
     inventory_status = yield context.call_activity("update_inventory", order_data)
 
-    notification = yield context.call_activity("send_confirmation", order_data)
+    confirmation = yield context.call_activity("send_confirmation", order_data)
 
     return {
+        "validation": "Passed",
         "payment": payment_status,
         "inventory": inventory_status,
-        "notification": notification
+        "confirmation": confirmation
     }
